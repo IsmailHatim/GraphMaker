@@ -1,6 +1,8 @@
 import dgl
 import torch
 import torch.nn.functional as F
+import networkx as nx
+import pickle
 
 from data import load_dataset, preprocess
 from eval_utils import Evaluator
@@ -67,14 +69,19 @@ def main(args):
     # Set seed for better reproducibility.
     set_seed()
 
-    for _ in range(args.num_samples):
+    for i in range(args.num_samples):
         X_0_one_hot, Y_0_one_hot, E_0 = model.sample()
         src, dst = E_0.nonzero().T
         g_sample = dgl.graph((src, dst), num_nodes=num_nodes).cpu()
 
+
         evaluator.add_sample(g_sample,
                              X_0_one_hot.cpu(),
                              Y_0_one_hot.cpu())
+        #g_sample.ndata['x'] = X_0_one_hot
+        g_sample.ndata['y'] = Y_0_one_hot.cpu().argmax(dim=1)
+        nx_g = dgl.to_networkx(g_sample, node_attrs=['y'])
+        pickle.dump(nx_g, open(f'graph{i}.pickle', 'wb'))
 
     evaluator.summary()
 
