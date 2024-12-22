@@ -78,10 +78,9 @@ def main(args):
         evaluator.add_sample(g_sample,
                              X_0_one_hot.cpu(),
                              Y_0_one_hot.cpu())
-        x = X_0_one_hot.cpu().sum(dim=2).T
+        x = X_0_one_hot.cpu().argmax(dim=2).float().T
         y = Y_0_one_hot.cpu().argmax(dim=1)
         edge_index = torch.stack(g_sample.all_edges())
-        nx_g = dgl.to_networkx(g_sample)
         torch.save(x, f"x{i}.pth")
         torch.save(y, f"y{i}.pth")
         torch.save(edge_index, f"edge_index{i}.pth")
