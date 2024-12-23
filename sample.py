@@ -68,7 +68,7 @@ def main(args):
 
     # Set seed for better reproducibility.
     set_seed()
-
+    epochs = args.model_path.split('/')[2].split('.')[0].split('_')[2]
     for i in range(args.num_samples):
         X_0_one_hot, Y_0_one_hot, E_0 = model.sample()
         src, dst = E_0.nonzero().T
@@ -81,9 +81,9 @@ def main(args):
         x = X_0_one_hot.cpu().argmax(dim=2).float().T
         y = Y_0_one_hot.cpu().argmax(dim=1)
         edge_index = torch.stack(g_sample.all_edges())
-        torch.save(x, f"x{i}.pth")
-        torch.save(y, f"y{i}.pth")
-        torch.save(edge_index, f"edge_index{i}.pth")
+        torch.save(x, f"{model_name}_{epochs}_x{i}.pth")
+        torch.save(y, f"{model_name}_{epochs}_y{i}.pth")
+        torch.save(edge_index, f"{model_name}_{epochs}_edge_index{i}.pth")
         
 
 
