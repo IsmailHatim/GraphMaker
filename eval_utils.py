@@ -696,6 +696,8 @@ class Evaluator:
             test_mask=test_mask
         )
 
+        return dgl_g_sample.adj(), X_sample, Y_sample, dgl_g_sample.ndata["train_mask"], dgl_g_sample.ndata["val_mask"], dgl_g_sample.ndata["test_mask"]
+
     def summary(self):
         report = dict()
 
