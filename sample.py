@@ -78,16 +78,10 @@ def main(args):
         A_sample, X_sample, Y_sample, train_mask, val_mask, test_mask = evaluator.add_sample(g_sample,
                                                                                              X_0_one_hot.cpu(),
                                                                                              Y_0_one_hot.cpu())
-        
-        x = X_0_one_hot.cpu().argmax(dim=2).float().T
-        y = Y_0_one_hot.cpu().argmax(dim=1)
-        edge_index = torch.stack(g_sample.all_edges())
-        torch.save(x, f"{dataset}_graph/{model_name}_{epochs}_x{i}.pth")
-        torch.save(y, f"{dataset}_graph/{model_name}_{epochs}_y{i}.pth")
-        torch.save(edge_index, f"{dataset}_graph/{model_name}_{epochs}_edge_index{i}.pth")
-        torch.save(A_sample.indices(), f"{dataset}_graph/{model_name}_{epochs}_as{i}.pth")
-        torch.save(X_sample, f"{dataset}_graph/{model_name}_{epochs}_xs{i}.pth")
-        torch.save(Y_sample, f"{dataset}_graph/{model_name}_{epochs}_ys{i}.pth")
+        X_sample = torch.cat((X_sample, torch.zeros((num_nodes, 1))), dim=1)
+        torch.save(A_sample.indices(), f"{dataset}_graph/{model_name}_{epochs}_edge_index{i}.pth")
+        torch.save(X_sample, f"{dataset}_graph/{model_name}_{epochs}_x{i}.pth")
+        torch.save(Y_sample, f"{dataset}_graph/{model_name}_{epochs}_y{i}.pth")
         torch.save(train_mask, f"{dataset}_graph/{model_name}_{epochs}_train_mask{i}.pth")
         torch.save(val_mask, f"{dataset}_graph/{model_name}_{epochs}_val_mask{i}.pth")
         torch.save(test_mask, f"{dataset}_graph/{model_name}_{epochs}_test_mask{i}.pth")
