@@ -1,5 +1,6 @@
 __pycache__
 wandb
 cora_cpts/
+cora_graph/
 orca/
 *.ipynb
