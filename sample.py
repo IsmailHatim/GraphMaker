@@ -38,7 +38,7 @@ def main(args):
 
     if model_name == "Sync":
         from model import ModelSync
-
+        epochs = args.model_path.split('/')[2].split('.')[0].split('_')[2]
         model = ModelSync(X_marginal=X_marginal,
                           Y_marginal=Y_marginal,
                           E_marginal=E_marginal,
@@ -52,7 +52,7 @@ def main(args):
 
     elif model_name == "Async":
         from model import ModelAsync
-
+        epochs = args.model_path.split('/')[2].split('.')[0].split('_')[3]
         model = ModelAsync(X_marginal=X_marginal,
                            Y_marginal=Y_marginal,
                            E_marginal=E_marginal,
@@ -67,8 +67,8 @@ def main(args):
     model.eval()
 
     # Set seed for better reproducibility.
-    set_seed(42)
-    epochs = args.model_path.split('/')[2].split('.')[0].split('_')[2]
+    #set_seed()
+
     for i in range(args.num_samples):
         X_0_one_hot, Y_0_one_hot, E_0 = model.sample()
         src, dst = E_0.nonzero().T
@@ -86,8 +86,6 @@ def main(args):
         torch.save(val_mask, f"{dataset}_graph/{model_name}_{epochs}_val_mask{i}.pth")
         torch.save(test_mask, f"{dataset}_graph/{model_name}_{epochs}_test_mask{i}.pth")
         
-
-
     evaluator.summary()
 
 if __name__ == '__main__':
