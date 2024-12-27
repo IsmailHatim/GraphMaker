@@ -67,18 +67,17 @@ def main(args):
     model.eval()
 
     # Set seed for better reproducibility.
-    #set_seed()
+    # set_seed()
 
     for i in range(args.num_samples):
         X_0_one_hot, Y_0_one_hot, E_0 = model.sample()
         src, dst = E_0.nonzero().T
         g_sample = dgl.graph((src, dst), num_nodes=num_nodes).cpu()
 
-
         A_sample, X_sample, Y_sample, train_mask, val_mask, test_mask = evaluator.add_sample(g_sample,
                                                                                              X_0_one_hot.cpu(),
                                                                                              Y_0_one_hot.cpu())
-        X_sample = torch.cat((X_sample, torch.zeros((num_nodes, 1))), dim=1)
+        
         torch.save(A_sample.indices(), f"{dataset}_graph/{model_name}_{epochs}_edge_index{i}.pth")
         torch.save(X_sample, f"{dataset}_graph/{model_name}_{epochs}_x{i}.pth")
         torch.save(Y_sample, f"{dataset}_graph/{model_name}_{epochs}_y{i}.pth")
