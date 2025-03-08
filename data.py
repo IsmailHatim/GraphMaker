@@ -3,13 +3,15 @@ import torch
 import torch.nn.functional as F
 
 from dgl.data import AmazonCoBuyPhotoDataset, AmazonCoBuyComputerDataset, \
-    CoraGraphDataset
+    CoraGraphDataset, CiteseerGraphDataset
 
 def load_dataset(data_name):
     if data_name == "cora":
         dataset = CoraGraphDataset()
     elif data_name == "amazon_photo":
         dataset = AmazonCoBuyPhotoDataset()
+    elif data_name == "citeseer":
+        dataset = CiteseerGraphDataset()
     elif data_name == "amazon_computer":
         dataset = AmazonCoBuyComputerDataset()
 
